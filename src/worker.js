@@ -23,10 +23,37 @@ function liveConfigured(env) {
 
 async function armorIQAuthorize(env, { intent, tool, args }) {
   const client = new ArmorIQClient({ apiKey: env.ARMORIQ_API_KEY, userId: env.ARMORIQ_USER_ID || 'genesis-boundary-service', agentId: env.ARMORIQ_AGENT_ID || 'genesis-boundary-agent' });
-  const plan = client.capturePlan('boundary-ledger-planner', intent, { goal: intent, steps: [{ action: tool, mcp: 'genesis-boundary-mcp', params: args }] });
-  const token = await client.getIntentToken(plan, { validitySeconds: 120 });
-  const result = await client.invokeWithPolicy('genesis-boundary-mcp', tool, token, args, { userEmail: env.ARMORIQ_USER_EMAIL, waitForApproval: false });
-  return { output: result?.data ?? result, armor_iq: { mode: 'live', status: result?.status || 'authorized', token_id: token?.tokenId || null, plan_hash: plan?.planHash || null, merkle_root: plan?.merkleRoot || null } };
+  // Axios defaults Request.cache to "default"; Cloudflare Workers accepts
+  // only its supported cache modes. Keep transport uncached for intent tokens.
+  if (client.httpClient?.defaults) {
+    client.httpClient.defaults.fetchOptions = { cache: 'no-store' };
+  }
+  const scope = client.forUser(env.ARMORIQ_USER_EMAIL);
+  const session = scope.startSession({
+    mode: 'proxy',
+    defaultMcpName: 'genesis-boundary-mcp',
+    llm: 'boundary-ledger'
+  });
+  let token = null;
+  try {
+    token = await session.startPlan([{ name: tool, args }], intent);
+    const result = await session.dispatch(tool, args);
+    return {
+      output: result?.data ?? result,
+      armor_iq: {
+        mode: 'live',
+        status: result?.status || 'authorized',
+        verified: true,
+        token_id: token?.tokenId || null,
+        plan_id: token?.planId || null
+      }
+    };
+  } finally {
+    if (token?.planId) {
+      try { await client.completePlan(token.planId); } catch { /* enforcement remains fail-closed; telemetry is secondary */ }
+    }
+    try { await session.flushObservability(); } finally { await session.close(); }
+  }
 }
 
 async function runBoundary(env, input) {
@@ -84,13 +111,13 @@ function mcpResponse(message) {
   if (method === 'initialize') return result({ protocolVersion: params.protocolVersion || '2025-06-18', capabilities: { tools: {} }, serverInfo: { name: 'genesis-boundary-mcp', version: '0.1.0' } });
   if (method === 'notifications/initialized') return new Response(null, { status: 202 });
   if (method === 'tools/list') return result({ tools: [
-    { name: 'repo.scan', description: 'Read-only deterministic scan of supplied MCP source.', inputSchema: { type: 'object', properties: { filename: { type: 'string' }, source: { type: 'string' } }, required: ['source'], additionalProperties: false } },
-    { name: 'fs.write', description: 'Boundary-test tool; defense-in-depth denied.', inputSchema: { type: 'object', additionalProperties: true } },
-    { name: 'shell.exec', description: 'Boundary-test tool; defense-in-depth denied.', inputSchema: { type: 'object', additionalProperties: true } },
-    { name: 'token.approve', description: 'Boundary-test tool; defense-in-depth denied.', inputSchema: { type: 'object', additionalProperties: true } }
+    { name: 'repo_scan', description: 'Read-only deterministic scan of supplied MCP source.', inputSchema: { type: 'object', properties: { filename: { type: 'string' }, source: { type: 'string' } }, required: ['source'], additionalProperties: false } },
+    { name: 'fs_write', description: 'Boundary-test tool; defense-in-depth denied.', inputSchema: { type: 'object', additionalProperties: true } },
+    { name: 'shell_exec', description: 'Boundary-test tool; defense-in-depth denied.', inputSchema: { type: 'object', additionalProperties: true } },
+    { name: 'token_approve', description: 'Boundary-test tool; defense-in-depth denied.', inputSchema: { type: 'object', additionalProperties: true } }
   ] });
   if (method === 'tools/call') {
-    if (params.name !== 'repo.scan') return result({ content: [{ type: 'text', text: `BLOCKED: ${params.name} is denied by the MCP server.` }], isError: true });
+    if (params.name !== 'repo_scan') return result({ content: [{ type: 'text', text: `BLOCKED: ${params.name} is denied by the MCP server.` }], isError: true });
     const scan = scanSource(params.arguments || {});
     return result({ content: [{ type: 'text', text: JSON.stringify(scan) }], structuredContent: scan, isError: false });
   }

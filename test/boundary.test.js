@@ -6,7 +6,7 @@ import { ReceiptLedger, verifyReceiptChain } from '../src/receipt-ledger.js';
 function harness({ mode = 'local-demo', armorIQ = null } = {}) {
   let executions = 0;
   const ledger = new ReceiptLedger({ clock: () => '2026-10-11T12:00:00.000Z' });
-  const engine = new BoundaryEngine({ ledger, mode, armorIQ, executors: { 'repo.scan': async () => { executions += 1; return { scanned: true }; }, 'fs.write': async () => { executions += 1; }, 'shell.exec': async () => { executions += 1; }, 'token.approve': async () => { executions += 1; } } });
+  const engine = new BoundaryEngine({ ledger, mode, armorIQ, executors: { repo_scan: async () => { executions += 1; return { scanned: true }; }, fs_write: async () => { executions += 1; }, shell_exec: async () => { executions += 1; }, token_approve: async () => { executions += 1; } } });
   return { engine, ledger, executions: () => executions };
 }
 

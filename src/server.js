@@ -19,7 +19,7 @@ const engine = new BoundaryEngine({
   ledger,
   armorIQ,
   mode,
-  executors: { 'repo.scan': (args) => scanSource(args) }
+  executors: { repo_scan: (args) => scanSource(args) }
 });
 
 function jsonRpcResult(id, result) {
@@ -34,14 +34,14 @@ function handleMcp(message) {
   if (method === 'notifications/initialized') return null;
   if (method === 'tools/list') {
     return jsonRpcResult(id, { tools: [
-      { name: 'repo.scan', description: 'Read-only deterministic scan of supplied MCP source.', inputSchema: { type: 'object', properties: { filename: { type: 'string' }, source: { type: 'string' } }, required: ['source'], additionalProperties: false } },
-      { name: 'fs.write', description: 'Boundary-test tool; always denied downstream.', inputSchema: { type: 'object', additionalProperties: true } },
-      { name: 'shell.exec', description: 'Boundary-test tool; always denied downstream.', inputSchema: { type: 'object', additionalProperties: true } },
-      { name: 'token.approve', description: 'Boundary-test tool; always denied downstream.', inputSchema: { type: 'object', additionalProperties: true } }
+      { name: 'repo_scan', description: 'Read-only deterministic scan of supplied MCP source.', inputSchema: { type: 'object', properties: { filename: { type: 'string' }, source: { type: 'string' } }, required: ['source'], additionalProperties: false } },
+      { name: 'fs_write', description: 'Boundary-test tool; always denied downstream.', inputSchema: { type: 'object', additionalProperties: true } },
+      { name: 'shell_exec', description: 'Boundary-test tool; always denied downstream.', inputSchema: { type: 'object', additionalProperties: true } },
+      { name: 'token_approve', description: 'Boundary-test tool; always denied downstream.', inputSchema: { type: 'object', additionalProperties: true } }
     ] });
   }
   if (method === 'tools/call') {
-    if (params.name !== 'repo.scan') {
+    if (params.name !== 'repo_scan') {
       return jsonRpcResult(id, { content: [{ type: 'text', text: `BLOCKED: ${params.name} is defense-in-depth denied by the MCP server.` }], isError: true });
     }
     const result = scanSource(params.arguments || {});

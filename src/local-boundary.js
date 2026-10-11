@@ -18,16 +18,16 @@ export function evaluateLocalBoundary({ tool, args = {} }) {
     };
   }
 
-  if (canonicalTool === 'repo.scan') {
+  if (canonicalTool === 'repo_scan') {
     return { decision: 'ALLOW', reason: 'Read-only source inspection is within declared scope.', rule: 'READ_ONLY_SCAN_ALLOW' };
   }
-  if (canonicalTool === 'fs.write') {
+  if (canonicalTool === 'fs_write') {
     return { decision: 'BLOCK', reason: 'Filesystem mutation is outside the read-only remediation scope.', rule: 'FILESYSTEM_MUTATION_DENY' };
   }
-  if (canonicalTool === 'shell.exec') {
+  if (canonicalTool === 'shell_exec') {
     return { decision: 'BLOCK', reason: 'Shell execution is outside the declared agent scope.', rule: 'SHELL_EXECUTION_DENY' };
   }
-  if (canonicalTool === 'token.approve') {
+  if (canonicalTool === 'token_approve') {
     const destination = String(findValue(args, /(?:destination|spender)$/i) || '');
     const amount = String(findValue(args, /(?:amount|allowance|approval)$/i) || '');
     if (!/^0x[0-9a-f]{40}$/i.test(destination) || /^0x0{40}$/i.test(destination)) {

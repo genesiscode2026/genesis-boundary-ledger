@@ -1,16 +1,20 @@
 const TOOL_ALIASES = new Map([
-  ['repo.scan', 'repo.scan'],
-  ['scan_repository', 'repo.scan'],
-  ['inspect_code', 'repo.scan'],
-  ['fs.write', 'fs.write'],
-  ['write_file', 'fs.write'],
-  ['save_patch', 'fs.write'],
-  ['shell.exec', 'shell.exec'],
-  ['run_command', 'shell.exec'],
-  ['terminal', 'shell.exec'],
-  ['token.approve', 'token.approve'],
-  ['approve_token', 'token.approve'],
-  ['erc20_approve', 'token.approve']
+  ['repo.scan', 'repo_scan'],
+  ['repo_scan', 'repo_scan'],
+  ['scan_repository', 'repo_scan'],
+  ['inspect_code', 'repo_scan'],
+  ['fs.write', 'fs_write'],
+  ['fs_write', 'fs_write'],
+  ['write_file', 'fs_write'],
+  ['save_patch', 'fs_write'],
+  ['shell.exec', 'shell_exec'],
+  ['shell_exec', 'shell_exec'],
+  ['run_command', 'shell_exec'],
+  ['terminal', 'shell_exec'],
+  ['token.approve', 'token_approve'],
+  ['token_approve', 'token_approve'],
+  ['approve_token', 'token_approve'],
+  ['erc20_approve', 'token_approve']
 ]);
 
 const SUSPICIOUS_KEYS = /(?:command|cmd|shell|script|write|path|filename|destination|spender|allowance|approval|amount)/i;

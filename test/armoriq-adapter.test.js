@@ -10,7 +10,7 @@ test('adapter performs ArmorIQ plan, token and policy invocation in order', asyn
     invokeWithPolicy: async (...args) => { calls.push(['invokeWithPolicy', ...args]); return { status: 'success' }; }
   };
   const adapter = new ArmorIQAdapter({ client, userEmail: 'builder@example.com' });
-  const result = await adapter.authorize({ intent: 'Read source', tool: 'repo.scan', args: { filename: 'a.js' } });
+  const result = await adapter.authorize({ intent: 'Read source', tool: 'repo_scan', args: { filename: 'a.js' } });
   assert.equal(result.decision, 'ALLOW');
   assert.equal(result.externalExecution, true);
   assert.deepEqual(calls.map((call) => call[0]), ['capturePlan', 'getIntentToken', 'invokeWithPolicy']);
