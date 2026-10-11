@@ -1,0 +1,44 @@
+{
+  "schema": "genesis.boundary.live-verification.v1",
+  "verified_at": "2026-10-11T08:02:39Z",
+  "deployment": {
+    "url": "https://genesis-boundary-ledger.genesisagenttools.workers.dev",
+    "cloudflare_version": "e4cb7880-ff31-4524-b661-02f864ad6532",
+    "mode": "live",
+    "armor_iq_configured": true
+  },
+  "policy": {
+    "name": "Flow State — GENESIS Least Privilege",
+    "target": "genesis-boundary-mcp",
+    "default": "BLOCK",
+    "allow": ["repo_scan"],
+    "block": ["fs_write", "shell_exec", "token_approve"]
+  },
+  "allowed_probe": {
+    "tool": "repo_scan",
+    "decision": "ALLOW",
+    "verified": true,
+    "mcp_result": "REVIEW",
+    "finding": "SHELL_EXECUTION",
+    "tool_executed": true,
+    "mutating_effect_executed": false,
+    "side_effect_executed": false
+  },
+  "remote_policy_probes": [
+    { "tool": "fs_write", "decision": "BLOCK", "effect_executed": false },
+    { "tool": "shell_exec", "decision": "BLOCK", "effect_executed": false },
+    { "tool": "token_approve", "decision": "BLOCK", "effect_executed": false }
+  ],
+  "public_boundary_probes": [
+    { "alias": "write_file", "canonical_tool": "fs_write", "decision": "BLOCK", "tool_executed": false },
+    { "alias": "run_command", "canonical_tool": "shell_exec", "decision": "BLOCK", "tool_executed": false },
+    { "alias": "approve_token", "canonical_tool": "token_approve", "decision": "BLOCK", "tool_executed": false }
+  ],
+  "observability": {
+    "agent": "genesis-boundary-agent",
+    "sessions": 4,
+    "traces": 4,
+    "reported_errors": 0
+  },
+  "secrets_in_artifact": false
+}

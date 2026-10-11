@@ -21,6 +21,7 @@
 - Remote ArmorIQ policy probes verified: `fs_write`, `shell_exec`, and `token_approve` each returned a policy block before MCP execution.
 - Public boundary probes verified: the aliases `write_file`, `run_command`, and `approve_token` normalized to the canonical prohibited tools, returned `BLOCK`, and recorded both `tool_executed: false` and `side_effect_executed: false`.
 - ArmorIQ observability dashboard verified after explicit flush: 4 sessions and 4 traces for `genesis-boundary-agent`, with 0 reported execution errors.
+- Machine-readable redacted summary: `evidence/live-verification.json`. The older `receipts.jsonl` entries are retained only as local-development provenance and are not evidence of the final live deployment.
 
 ## Evidence boundary
 
