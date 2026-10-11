@@ -2,12 +2,17 @@
 
 Flow State 2026 submission candidate: a read-only MCP security agent whose actions are intercepted before execution, evaluated against an explicit boundary, and written to a hash-chained evidence ledger.
 
+Public demo: https://genesis-boundary-ledger.genesisagenttools.workers.dev
+
+Public MCP endpoint: `https://genesis-boundary-ledger.genesisagenttools.workers.dev/mcp`
+
 ## What is real today
 
 - The local boundary engine, alias normalization, nested-argument detection, pre-effect blocking, scanner demo, receipt chain and UI are implemented and tested.
 - The official `@armoriq/sdk` is integrated through its plan → intent token → `invokeWithPolicy` lifecycle.
 - Live mode fails closed if ArmorIQ credentials, policy or MCP registration are absent.
 - Local demo mode is visibly labeled and never claims ArmorIQ authorization.
+- The public Cloudflare deployment currently runs in that truthful local-demo mode while live ArmorIQ credentials and policy registration remain outstanding.
 
 ## Run
 

@@ -9,6 +9,11 @@
 - Boundary denial: aliased `terminal` plus nested shell payload returned `BLOCK`, `side_effect_executed: false`.
 - MCP discovery: `tools/list` returned `repo.scan`, `fs.write`, `shell.exec`, and `token.approve`.
 - Dependency audit at installation: 0 vulnerabilities.
+- Public deployment: `https://genesis-boundary-ledger.genesisagenttools.workers.dev`.
+- Cloudflare deployment version: `bb3bf9e1-7daf-46ed-9a8f-2beb81e6cc43`.
+- Public status verified: `mode: local-demo`, `armor_iq_configured: false`.
+- Public boundary test verified: renamed `terminal` call with nested shell payload returned `BLOCK`, `tool_executed: false`, `side_effect_executed: false`.
+- Public MCP call verified: `repo.scan` detected the supplied `eval(input)` as `SHELL_EXECUTION` / `CRITICAL`.
 
 ## Evidence boundary
 
