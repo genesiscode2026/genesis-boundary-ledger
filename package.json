@@ -1,0 +1,17 @@
+{
+  "name": "genesis-boundary-ledger",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "ArmorIQ-enforced boundary tests and tamper-evident receipts for an MCP security agent.",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@armoriq/sdk": "0.6.8"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

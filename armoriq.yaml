@@ -1,0 +1,23 @@
+# Versioned policy intent for registration with the official ArmorIQ CLI.
+# Run `armoriq validate` and `armoriq register` only after real credentials and
+# the deployed MCP URL exist. Missing configuration must remain fail-closed.
+identity:
+  api_key: $ARMORIQ_API_KEY
+  user_id: genesis-boundary-service
+  agent_id: genesis-boundary-agent
+mcp_servers:
+  - id: genesis-boundary-mcp
+    url: $GENESIS_BOUNDARY_MCP_URL
+    description: Read-only MCP source scanner guarded by ArmorIQ.
+    auth:
+      type: none
+policy:
+  allow:
+    - genesis-boundary-mcp.repo.scan
+  deny:
+    - genesis-boundary-mcp.fs.write
+    - genesis-boundary-mcp.shell.exec
+    - genesis-boundary-mcp.token.approve
+intent:
+  ttl_seconds: 120
+  require_csrg: true

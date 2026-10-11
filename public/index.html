@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GENESIS Boundary Ledger</title><link rel="stylesheet" href="/styles.css"></head>
+<body>
+  <main>
+    <header><p class="eyebrow">FLOW STATE 2026 · ARMORIQ</p><h1>GENESIS Boundary Ledger</h1><p>Every action is checked before execution. Every decision becomes tamper-evident evidence.</p><div id="mode" class="mode">Checking enforcement mode…</div></header>
+    <section class="grid">
+      <button data-case="scan"><strong>Allowed</strong><span>Read-only MCP scan</span></button>
+      <button data-case="write"><strong>Blocked</strong><span>Filesystem write</span></button>
+      <button data-case="shell"><strong>Blocked</strong><span>Renamed shell command</span></button>
+      <button data-case="approval"><strong>Blocked</strong><span>Nested unlimited approval</span></button>
+    </section>
+    <section class="panel"><div class="status" id="status">Choose a boundary test.</div><pre id="output">No receipt yet.</pre></section>
+  </main><script type="module" src="/app.js"></script>
+</body></html>
