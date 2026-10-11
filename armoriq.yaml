@@ -7,7 +7,9 @@ identity:
   agent_id: genesis-boundary-agent
 mcp_servers:
   - id: genesis-boundary-mcp
-    url: $GENESIS_BOUNDARY_MCP_URL
+    # Public endpoint is non-secret. Python CLI 0.6.10 does not currently
+    # resolve environment references for MCP URLs, so keep the verified URL explicit.
+    url: https://genesis-boundary-ledger.genesisagenttools.workers.dev/mcp
     description: Read-only MCP source scanner guarded by ArmorIQ.
     auth:
       type: none

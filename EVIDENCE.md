@@ -14,18 +14,19 @@
 - Public status verified: `mode: local-demo`, `armor_iq_configured: false`.
 - Public boundary test verified: renamed `terminal` call with nested shell payload returned `BLOCK`, `tool_executed: false`, `side_effect_executed: false`.
 - Public MCP call verified: `repo.scan` detected the supplied `eval(input)` as `SHELL_EXECUTION` / `CRITICAL`.
+- ArmorIQ GitHub authentication verified for `genesiscode2026`; the CLI identity is authenticated in the matching workspace. The private account email is intentionally omitted from this public evidence file.
+- Official ArmorIQ CLI 0.6.10 validation passed: API key authenticated, public MCP reachable, 4 tools discovered, all policy references valid.
+- ArmorIQ control-plane registration passed: `genesis-boundary-agent` registered, `genesis-boundary-mcp` registered, policy applied with 1 allowed and 3 denied tools, official proxy endpoint returned.
 
 ## Evidence boundary
 
 The local suite proves interception order, deterministic local rules, default deny, alias/nested-payload resistance, receipt-chain integrity, ArmorIQ SDK call ordering through a controlled test double, and fail-closed behavior when ArmorIQ denies or is missing.
 
-It does **not** yet prove a live ArmorIQ authorization. That requires a real ArmorIQ account/API key, organization policy, a public MCP endpoint registered with ArmorIQ, and a captured platform audit event. Until those exist, the public UI must remain visibly labeled `LOCAL DEMO MODE`.
+It does **not** yet prove a successful live ArmorIQ invocation or captured platform audit event. The account, API key, organization policy and public MCP registration now exist, but the runtime secret has not been transmitted to Cloudflare and no live demo payload has been sent. Until both actions are explicitly authorized and verified, the public UI must remain visibly labeled `LOCAL DEMO MODE`.
 
 ## Remaining external evidence
 
-1. Create or authenticate the real ArmorIQ organization.
-2. Deploy this service and set `GENESIS_BOUNDARY_MCP_URL` to its `/mcp` endpoint.
-3. Validate/register `armoriq.yaml` with the official CLI.
-4. Run one allowed and three prohibited live calls.
-5. Capture ArmorIQ audit records and public deployment URL.
-6. Publish the repository and demo video only after those claims are verified.
+1. Store `ARMORIQ_API_KEY` and `ARMORIQ_USER_EMAIL` in Cloudflare's encrypted Worker secret store after explicit authorization.
+2. Run one allowed and three prohibited live calls.
+3. Capture ArmorIQ audit records and the live public response.
+4. Record and publish the demo video only after those claims are verified.
